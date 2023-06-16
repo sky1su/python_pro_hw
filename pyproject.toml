@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "my_todo"
+version = "0.1.0"
+description = ""
+authors = ["bubnovgs <bubnovgs@it.mos.ru>"]
+readme = "README.md"
+packages = [{include = "my_todo"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+
+[tool.poetry.scripts]
+my-todo = "my_todo.my_todo:main"
+
+
+[tool.poetry.group.dev.dependencies]
+safety = "^2.3.5"
+isort = "^5.12.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
