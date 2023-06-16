@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import my_todo.my_todo as m2td
 
 
