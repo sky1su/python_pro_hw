@@ -16,6 +16,9 @@ my-todo = "my_todo.my_todo:main"
 [tool.poetry.group.dev.dependencies]
 safety = "^2.3.5"
 isort = "^5.12.0"
+mypy = "^1.3.0"
+returns = "^0.20.0"
+wemake-python-styleguide = "^0.18.0"
 
 [build-system]
 requires = ["poetry-core"]
