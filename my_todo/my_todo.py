@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+"""
+Модуль реализует работу с базой данных задач,
+хранящихся в json файле.
+"""
 import argparse
 import json
 import os
@@ -8,7 +12,7 @@ from typing import final
 
 @final
 @dataclass
-class TaskDB(object):
+class TaskDB():
     """
     Класс для работы с базой данных задач.
     Реализует методы для работы с файлом json
@@ -41,9 +45,9 @@ class TaskDB(object):
         mode = 'r' if os.path.exists(self.get_db_path()) else 'w'
         with open(self.get_db_path(), mode, encoding='utf8') as data_file:
             try:
-                return (json.load(data_file))
-            except BaseException:
-                return ([])
+                return json.load(data_file)
+            except json.JSONDecodeError:
+                return []
 
     def sort_data(self) -> None:
         """
@@ -56,10 +60,9 @@ class TaskDB(object):
         """
         Возвращает следующий по порядку id в базе данных.
         """
-        if (len(self.task_data) == 0):
-            return(1)
-        else:
-            return(self.task_data[0]['id']+1)
+        if len(self.task_data) == 0:
+            return 1
+        return self.task_data[0]['id']+1
 
     def write_data(self) -> None:
         """
@@ -93,11 +96,11 @@ class TaskDB(object):
                     item['title'].lower() + item['description'].lower()
             ):
                 task_list.append(item)
-        if (len(task_list) == 0):
+        if len(task_list) == 0:
             task_list = [{'info': 'Нет подоходящих задач',
                           'query': query
                           }]
-        return (task_list)
+        return task_list
 
 
     def task_done(self, task_id: int) -> None:
@@ -107,7 +110,7 @@ class TaskDB(object):
         """
         count = 0
         for item in self.task_data:
-            if (item['id'] == task_id):
+            if item['id'] == task_id:
                 self.task_data.pop(count)
                 self.write_data()
             else:
@@ -118,6 +121,8 @@ class TaskDB(object):
         Возращает первые count задач и текущего состояния базы данных.
         """
         return_data = []
+        if len(self.task_data) == 0:
+            return return_data
         for task_item in range(count):
             return_data.append(self.task_data[task_item])
         return return_data
