@@ -91,6 +91,8 @@ class TaskDB():
         Возращяет список найденных задач.
         """
         task_list = []
+        if len(self.task_data) == 0:
+            return task_list
         for item in self.task_data:
             if (query.lower() in
                     item['title'].lower() + item['description'].lower()
@@ -123,6 +125,8 @@ class TaskDB():
         return_data = []
         if len(self.task_data) == 0:
             return return_data
+        if len(self.task_data) < count:
+            return self.task_data
         for task_item in range(count):
             return_data.append(self.task_data[task_item])
         return return_data
@@ -187,21 +191,29 @@ def main():
     subparsers = parser.add_subparsers(title='subcommands', help='description')
 
     parser_add_task = subparsers.add_parser('add', help='add new task')
-    parser_add_task.add_argument('title', help='title for new task')
-    parser_add_task.add_argument('description', help='description for task')
+    parser_add_task.add_argument('title',
+                                 help='title for new task',
+                                 type=str
+                                 )
+    parser_add_task.add_argument('description',
+                                 help='description for task',
+                                 type=str
+                                 )
     parser_add_task.set_defaults(func=add_task)
 
     parser_find_task = subparsers.add_parser('find',
                                              help='find task by substring'
                                              )
     parser_find_task.add_argument('query',
-                                  help='substring for query to task db'
+                                  help='substring for query to task db',
+                                  type=str
                                   )
     parser_find_task.set_defaults(func=find_task)
 
     parser_show_task = subparsers.add_parser('show', help='show task')
     parser_show_task.add_argument('count',
-                                  help='count numbers task for dispaly'
+                                  help='count numbers task for dispaly',
+                                  type=int
                                   )
     parser_show_task.set_defaults(func=show_task)
 
@@ -209,7 +221,9 @@ def main():
                                                  help='mark task as complete '
                                                       'and remove from db'
                                                  )
-    parser_complete_task.add_argument('task_id', help='id for completed task')
+    parser_complete_task.add_argument('task_id',
+                                      help='id for completed task',
+                                      type=int)
     parser_complete_task.set_defaults(func=complete_task)
 
     args = parser.parse_args()
